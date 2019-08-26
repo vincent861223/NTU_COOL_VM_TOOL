@@ -30,6 +30,15 @@ def create_parser():
     parser.add_argument('--spec', dest='spec', type=str, help='Spec of the VM. Choose from "large", "medium", "small". ')
     return parser
 
+def exec_cmd(cmd):
+    # Execute the command and return the ouput message. 
+    # Input: str
+    # Output: str
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
+    output, err = p.communicate()
+    p_status = p.wait()
+    return output.decode('utf-8')
+
 def print_progress(message):
     # Print the progress in red color
     print(RED + '[' + str(datetime.datetime.now()) + '] ' + message + END)
@@ -74,14 +83,6 @@ def get_systemID_from_mac(mac):
     system_id = cmd_output[id_index + len('System ID:') + 1: id_index + len('System ID:') + 7]
     return system_id
 
-def exec_cmd(cmd):
-    # Execute the command and return the ouput message. 
-    # Input: str
-    # Output: str
-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
-    output, err = p.communicate()
-    p_status = p.wait()
-    return output.decode('utf-8')
 
 def setup_vm(args, system_id):
     # Setup the power type of the VM so that it can be controled by MAAS. 
